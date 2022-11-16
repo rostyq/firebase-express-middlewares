@@ -1,4 +1,3 @@
-import { firebaseError } from "error";
 import type { Handler } from "express";
 import type {} from ".";
 
@@ -16,13 +15,13 @@ export function verifyIdToken(checkRevoked?: boolean): Handler {
     const header = req.header("authorization");
 
     if (!header) {
-      return next(firebaseError("auth/no-header", "Authorization header is missing."));
+      return next();
     }
 
     const [method, token] = header.split(" ");
 
     if (method != "Bearer") {
-      return next(firebaseError("auth/invalid-method", "Requested authorization method is not `Bearer`."));
+      return next();
     }
 
     const decoded = await req.firebase!.auth!.verifyIdToken(token, checkRevoked);
@@ -31,6 +30,8 @@ export function verifyIdToken(checkRevoked?: boolean): Handler {
       token,
       decoded
     }
+
+    next();
   }
 }
 
@@ -39,7 +40,7 @@ export function verifySessionCookie(checkRevoked?: boolean, name?: string): Hand
     const session = req.cookies["session" || name];
 
     if (!session) {
-      return next(firebaseError("auth/no-cookie", "Session cookie is missing."));
+      return next();
     }
 
     const decoded = await req.firebase!.auth!.verifySessionCookie(session, checkRevoked);
@@ -48,5 +49,7 @@ export function verifySessionCookie(checkRevoked?: boolean, name?: string): Hand
       session,
       decoded
     }
+
+    next();
   }
 }
