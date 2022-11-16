@@ -28,7 +28,7 @@ declare global {
 }
 
 export { setApp, setAppCheck } from "./app";
-export { setAuth } from "./auth";
+export { setAuth, verifyIdToken, verifySessionCookie } from "./auth";
 export { setDatabase } from "./database";
 export { setFirestore } from "./firestore";
 export { setFunctions } from "./functions";
