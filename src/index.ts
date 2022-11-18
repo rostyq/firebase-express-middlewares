@@ -18,6 +18,7 @@ declare global {
       token?: string;
       session?: string;
       decoded?: import("firebase-admin/auth").DecodedIdToken;
+      user?: import("firebase-admin/auth").UserRecord;
     }
 
     export interface Request {
@@ -28,7 +29,7 @@ declare global {
 }
 
 export { setApp, setAppCheck } from "./app";
-export { setAuth, verifyIdToken, verifySessionCookie } from "./auth";
+export { setAuth, verifyIdToken, verifySessionCookie, getUser } from "./auth";
 export { setDatabase } from "./database";
 export { setFirestore } from "./firestore";
 export { setFunctions } from "./functions";

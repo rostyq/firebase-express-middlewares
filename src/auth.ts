@@ -58,3 +58,21 @@ export function verifySessionCookie(checkRevoked?: boolean, name?: string): Hand
     }
   }
 }
+
+export function getUser(): Handler {
+  return async (req, _res, next) => {
+    const auth = req.firebase!.auth!
+    const uid = req.auth!.decoded!.uid;
+
+    if (!uid) {
+      return next();
+    }
+
+    try {
+      req.auth!.user = await auth.getUser(uid);
+      next();
+    } catch (err) {
+      next(err);
+    }
+  }
+}
