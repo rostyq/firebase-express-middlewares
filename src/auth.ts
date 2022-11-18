@@ -42,7 +42,7 @@ export function verifyIdToken(checkRevoked?: boolean): Handler {
 export function verifySessionCookie(checkRevoked?: boolean, name?: string): Handler {
   return async (req, _res, next) => {
     const auth = req.firebase!.auth!;
-    const session = req.cookies["session" || name];
+    const session = req.cookies[name || "session"];
 
     if (!session) {
       return next();
