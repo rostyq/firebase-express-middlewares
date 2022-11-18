@@ -6,12 +6,16 @@ export function setAuth(): Handler {
     const { getAuth } = await import("firebase-admin/auth");
     req.firebase!.auth = getAuth(req.firebase!.app);
 
+    if (!req.auth) req.auth = {};
+
     next();
   }
 }
 
 export function verifyIdToken(checkRevoked?: boolean): Handler {
   return async (req, _res, next) => {
+    const auth = req.firebase!.auth!;
+
     const header = req.header("authorization");
 
     if (!header) {
@@ -24,32 +28,33 @@ export function verifyIdToken(checkRevoked?: boolean): Handler {
       return next();
     }
 
-    const decoded = await req.firebase!.auth!.verifyIdToken(token, checkRevoked);
+    req.auth!.token = token;
 
-    req.auth = {
-      token,
-      decoded
+    try {
+      req.auth!.decoded = await auth.verifyIdToken(token, checkRevoked);
+      next();
+    } catch (err) {
+      next(err);
     }
-
-    next();
   }
 }
 
 export function verifySessionCookie(checkRevoked?: boolean, name?: string): Handler {
   return async (req, _res, next) => {
+    const auth = req.firebase!.auth!;
     const session = req.cookies["session" || name];
 
     if (!session) {
       return next();
     }
 
-    const decoded = await req.firebase!.auth!.verifySessionCookie(session, checkRevoked);
+    req.auth!.session = session;
 
-    req.auth = {
-      session,
-      decoded
+    try {
+      req.auth!.decoded = await auth.verifySessionCookie(session, checkRevoked);
+      next();
+    } catch (err) {
+      next(err);
     }
-
-    next();
   }
 }
