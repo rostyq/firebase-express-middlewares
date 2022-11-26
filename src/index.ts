@@ -7,6 +7,8 @@ declare global {
       auth?: import("firebase-admin/auth").Auth,
 
       firestore?: import("firebase-admin/firestore").Firestore,
+      firestoreSettings?: import("firebase-admin/firestore").Settings,
+
       database?: import("firebase-admin/database").Database,
 
       storage?: import("firebase-admin/storage").Storage,
@@ -31,6 +33,6 @@ declare global {
 export { setApp, setAppCheck } from "./app";
 export { setAuth, verifyIdToken, verifySessionCookie, getUser } from "./auth";
 export { setDatabase } from "./database";
-export { setFirestore } from "./firestore";
+export { setFirestore, setFirestoreSettings } from "./firestore";
 export { setFunctions } from "./functions";
 export { setStorage } from "./storage";
