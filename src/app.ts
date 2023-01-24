@@ -1,7 +1,7 @@
 import type { Handler } from "express";
 import type { App, AppOptions } from "firebase-admin/app";
 
-export function setApp(options?: AppOptions, appName?: string): Handler {
+export function setApp(appName?: string): Handler {
   return async (req, _res, next) => {
     const { getApp, initializeApp } = await import("firebase-admin/app");
 
@@ -12,13 +12,22 @@ export function setApp(options?: AppOptions, appName?: string): Handler {
     try {
       app = getApp(appName);
     } catch (_err) {
-      app = initializeApp(options, appName);
+      app = initializeApp(req.firebase.appOptions, appName);
     }
 
     req.firebase.app = app;
 
     next();
   };
+}
+
+export function setAppOptions(options: AppOptions): Handler {
+  return async (req, _res, next) => {
+    if (!req.firebase) req.firebase = {};
+
+    req.firebase!.appOptions = options;
+    next();
+  }
 }
 
 export function setAppCheck(): Handler {

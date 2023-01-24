@@ -2,6 +2,7 @@ declare global {
   export namespace Express {
     export interface Firebase {
       app?: import("firebase-admin/app").App,
+      appOptions?: import("firebase-admin/app").AppOptions,
       appCheck?: import("firebase-admin/app-check").AppCheck,
 
       auth?: import("firebase-admin/auth").Auth,
