@@ -1,10 +1,16 @@
-import type { Handler } from "express";
+import type { Handler, Response } from "express";
 
-export function setStorage(): Handler {
-  return async (req, _res, next) => {
-    const { getStorage } = await import("firebase-admin/storage");
-    req.firebase!.storage = getStorage(req.firebase!.app);
+export function bucketReadStream(): Handler {
+  return async (req, res: Response<ReadableStream, { filename?: string }>, next) => {
+    const filename = res.locals.filename;
+    
+    if (!filename || typeof filename !== "string") return next();
 
-    next();
+    const file = req.firebase!.bucket!.file(filename!);
+
+    file.createReadStream()
+      .once("error", err => next(err))
+      .once("end", () => next())
+      .pipe(res);
   }
 }
