@@ -16,7 +16,7 @@ export function verifyIdToken(checkRevoked?: boolean): Handler {
       return next();
     }
 
-    req.firebase!.user!.token = token;
+    req.firebase!.user = { ...req.firebase!.user, token };
 
     try {
       req.firebase!.user!.decoded = await auth.verifyIdToken(token, checkRevoked);
@@ -36,7 +36,7 @@ export function verifySessionCookie(checkRevoked?: boolean, name?: string): Hand
       return next();
     }
 
-    req.firebase!.user!.session = session;
+    req.firebase!.user = { ...req.firebase!.user, session };
 
     try {
       req.firebase!.user!.decoded = await auth.verifySessionCookie(session, checkRevoked);
