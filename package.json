@@ -1,9 +1,10 @@
 {
   "name": "firebase-express-middlewares",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Express Middlewares for Firebase",
   "main": "lib/index.js",
   "scripts": {
+    "prepare": "npm run build",
     "build": "tsc",
     "build:watch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
